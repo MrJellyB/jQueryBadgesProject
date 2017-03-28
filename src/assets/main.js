@@ -2,20 +2,37 @@ $(function() {
   $.ajax({
     url: "https://www.codeschool.com/users/Shavvy.json",
     dataType: "jsonp",
-    success: function(data){
-      var completed = data["courses"]["completed"];
+    success: function(response){
+      var completed = response.courses.completed;
       
-      completed.forEach(function(element){
-        //console.log(element);
-        $("#badges")
-          .append(`
-          <div class='course'>
-            <h3>` + element.title + `</h3>
-            <img src= ` + element.badge + `></img>
-            <a href=` + element.url + ` target='_blank' class='btn btn-primary'>See Course</a>
-          </div>`)
-      });
-    }
+      addCourses(completed);
+    }  
   })
   
+
+  function addCourses(courses) {
+    var $badges = $("#badges");
+
+    courses.forEach(function (course) {
+      var $course = $("<div />", {
+        "class": "course"
+      }).appendTo($badges);
+
+      $("<h3 />", {
+        "text": course.title
+      }).appendTo($course);
+
+      $("<img />", {
+        "src" : course.badge
+      }).appendTo($course);
+
+      $("<a />", {
+        "href": course.url,
+        "target": "_blank",
+        "text": "See Course",
+        "class": "btn btn-primary"
+      }).appendTo($course);
+
+    })
+  }
 });
